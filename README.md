@@ -32,10 +32,9 @@ Each writeup focuses on:
 - Key takeaways / lessons learned  
 
 ---
-```
+
 ## 📂 Repository Structure
-
-
+```
 writeups/
 │
 ├── HTB/
@@ -54,14 +53,14 @@ writeups/
 ---
 
 ## 📁 Machine Layout
-
+```
 Each machine folder typically contains:
 Machine-Name/
 ├── README.md # Full writeup
 ├── scans/ # nmap, gobuster, etc.
 ├── loot/ # creds, hashes, artifacts
 └── screenshots/ # proof / key steps
-
+```
 ---
 
 ## 🛠️ Tooling
