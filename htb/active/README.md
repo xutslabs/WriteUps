@@ -13,6 +13,7 @@ Hash Cracking
 Remote Code Execution via WMI
 
 🧠 Attack Path Summary
+
 Full port and service enumeration → Identify Domain Controller
 SMB enumeration → Anonymous access to SYSVOL
 Extract GPP cpassword → Recover service account credentials
@@ -31,7 +32,7 @@ sudo nmap -Pn -p- -T4 -sS -sV -sC \
   -oA nmap_full 10.129.18.70
 ```
 
-🔹 Autorecon
+# 🔹 Autorecon
 ```autorecon 10.129.18.70 \
 -m 100 \
 -mp 20 \
@@ -42,6 +43,7 @@ sudo nmap -Pn -p- -T4 -sS -sV -sC \
 ```
 
 🧩 Key Findings
+
 SMB (445) open
 LDAP (389) open
 Kerberos (88) open
@@ -49,15 +51,22 @@ Kerberos (88) open
 Host behaves like a Domain Controller
 
 📂 SMB Enumeration
+
 🔹 Anonymous Login
+```
 smbclient -L //10.129.18.70 -N
+```
 
 ✔ Anonymous access allowed
 
 🔹 Access Shares
+
+```
 smbclient //10.129.18.70/Replication -N
 Access to Replication share confirmed
 Users share initially inaccessible
+```
+
 🔹 Locate GPP Credentials
 
 Navigated to:
