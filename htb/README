@@ -1,3 +1,12 @@
+## 📂 Sections
+
+- 🔴 HTB → `writeups/htb`
+
+- 🟠 Proving Grounds → `writeups/pg`
+
+- 🧠 Patterns → `patterns/`
+
+
 # 🔴 Hack The Box Writeups
 
 A structured collection of completed **Hack The Box** machines, focused on real-world attack methodology, enumeration, and reproducible exploitation paths.
