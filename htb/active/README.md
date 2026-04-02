@@ -23,18 +23,22 @@ WMI execution → SYSTEM access → Root
 
 🔍 Enumeration
 🔹 Nmap Scan
+```
 sudo nmap -Pn -p- -T4 -sS -sV -sC \
   --script "default,vuln,smb-vuln*,ftp-anon,ftp-syst,ftp-bounce,http-methods,http-enum,http-webdav-scan" \
   --script-timeout 20s --max-retries 2 \
   -oA nmap_full 10.129.18.70
+```
+
 🔹 Autorecon
-autorecon 10.129.18.70 \
+```autorecon 10.129.18.70 \
 -m 100 \
 -mp 20 \
 -o autorecon_vm3 \
 --dirbuster.tool feroxbuster \
 --dirbuster.threads 50 \
 -v
+```
 
 🧩 Key Findings
 SMB (445) open
