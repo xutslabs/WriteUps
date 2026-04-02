@@ -1,1 +1,150 @@
+# 🔴 Hack The Box Writeups
 
+A structured collection of completed **Hack The Box** machines, focused on real-world attack methodology, enumeration, and reproducible exploitation paths.
+
+This is not just a list of solved boxes — it is a **growing knowledge base of tradecraft** designed to improve consistency, speed, and decision-making during engagements.
+
+---
+
+## 🧠 Philosophy
+
+The goal is simple:
+
+> **Methodology over memorization**
+
+Each machine is approached as if it were a real-world target:
+
+* No guessing
+* No skipping steps
+* No relying on “CTF logic”
+
+Instead, every step is:
+
+* Intentional
+* Repeatable
+* Explainable
+
+---
+
+## ⚔️ What You’ll Find Here
+
+Each writeup includes:
+
+* 🔍 **Enumeration**
+
+  * Service discovery
+  * Attack surface identification
+  * Initial foothold opportunities
+
+* 🚪 **Initial Access**
+
+  * Exploitation path
+  * Why it worked
+  * Alternative vectors (when applicable)
+
+* 🚀 **Privilege Escalation**
+
+  * Misconfigurations or vulnerabilities
+  * Abuse techniques
+  * Tooling and commands
+
+* 🧠 **Key Takeaways**
+
+  * What made this box important
+  * How the technique applies to real environments
+
+---
+
+## 🏷️ Tagging System
+
+Each machine is tagged to build a **searchable attack pattern index**.
+
+### Example Tags
+
+* **Techniques**
+
+  * `gpp`, `kerberoast`, `smb-anon`, `lfi`, `rce`
+
+* **Services**
+
+  * `smb`, `ldap`, `kerberos`, `http`, `ftp`
+
+* **Platform**
+
+  * `windows`, `linux`, `active-directory`
+
+* **Tools**
+
+  * `impacket`, `hashcat`, `bloodhound`, `nmap`
+
+* **Difficulty**
+
+  * `easy`, `medium`, `hard`
+
+This allows quick filtering like:
+
+* “Show all kerberoast boxes”
+* “Find all SMB-based initial access paths”
+
+---
+
+## 📂 Structure
+
+```
+htb/
+├── active/
+│   ├── README.md      # Human-readable writeup
+│   ├── exo.md         # AI-ingestion version
+│   ├── scans/
+│   ├── loot/
+│   └── screenshots/
+```
+
+---
+
+## 🤖 EXO Integration (Private Use)
+
+Each machine also includes an `exo.md` file:
+
+* Structured
+* Machine-readable
+* Built for automation and pattern recognition
+
+This enables:
+
+* Reusable attack chains
+* Automated decision support
+* Faster enumeration-to-exploitation workflows
+
+> This is not intended for public use — it powers a private red team assistant.
+
+---
+
+## 🎯 Purpose
+
+* Build a **structured knowledge base** of attack paths
+* Reinforce **repeatable methodology**
+* Track growth across difficulty levels
+* Serve as a **reference for real engagements (OSCP, red team, etc.)**
+
+---
+
+## ⚠️ Disclaimer
+
+All machines and techniques documented here are performed in **authorized lab environments only**.
+
+---
+
+## 🚀 Ongoing Work
+
+This repository is continuously updated as new machines are completed and new techniques are explored.
+
+---
+
+## 🧩 Related
+
+* Proving Grounds writeups (coming soon)
+* Attack pattern library (`/patterns`)
+* Tooling & automation (EXO integration)
+
+---
