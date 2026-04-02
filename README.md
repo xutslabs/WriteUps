@@ -34,6 +34,8 @@ Each writeup focuses on:
 ---
 
 ## 📂 Repository Structure
+
+
 writeups/
 │
 ├── HTB/
@@ -48,6 +50,7 @@ writeups/
 │ └── Advanced/
 │
 └── Templates/
+
 
 ---
 
