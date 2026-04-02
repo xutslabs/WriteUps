@@ -32,7 +32,7 @@ Each writeup focuses on:
 - Key takeaways / lessons learned  
 
 ---
-
+```
 ## 📂 Repository Structure
 
 
@@ -50,8 +50,7 @@ writeups/
 │ └── Advanced/
 │
 └── Templates/
-
-
+```
 ---
 
 ## 📁 Machine Layout
