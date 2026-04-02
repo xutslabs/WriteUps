@@ -22,6 +22,7 @@ Crack hash → Obtain Administrator credentials
 WMI execution → SYSTEM access → Root
 
 🔍 Enumeration
+
 🔹 Nmap Scan
 ```
 sudo nmap -Pn -p- -T4 -sS -sV -sC \
