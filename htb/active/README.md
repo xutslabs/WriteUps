@@ -1,5 +1,5 @@
-🔴 HTB Writeup – Active
-#📌 Overview
+# 🔴 HTB Writeup – Active
+# 📌 Overview
 
 Machine Name: Active
 Difficulty: Easy
@@ -12,7 +12,7 @@ Kerberoasting
 Hash Cracking
 Remote Code Execution via WMI
 
-#🧠 Attack Path Summary
+# 🧠 Attack Path Summary
 
 Full port and service enumeration → Identify Domain Controller
 SMB enumeration → Anonymous access to SYSVOL
@@ -22,9 +22,9 @@ Kerberoasting → Extract service ticket hash
 Crack hash → Obtain Administrator credentials
 WMI execution → SYSTEM access → Root
 
-🔍 Enumeration
+# 🔍 Enumeration
 
-🔹 Nmap Scan
+# 🔹 Nmap Scan
 ```
 sudo nmap -Pn -p- -T4 -sS -sV -sC \
   --script "default,vuln,smb-vuln*,ftp-anon,ftp-syst,ftp-bounce,http-methods,http-enum,http-webdav-scan" \
@@ -42,7 +42,7 @@ sudo nmap -Pn -p- -T4 -sS -sV -sC \
 -v
 ```
 
-#🧩 Key Findings
+# 🧩 Key Findings
 
 SMB (445) open
 LDAP (389) open
@@ -50,16 +50,16 @@ Kerberos (88) open
 
 Host behaves like a Domain Controller
 
-#📂 SMB Enumeration
+# 📂 SMB Enumeration
 
-#🔹 Anonymous Login
+# 🔹 Anonymous Login
 ```
 smbclient -L //10.129.18.70 -N
 ```
 
 ✔ Anonymous access allowed
 
-#🔹 Access Shares
+# 🔹 Access Shares
 
 ```
 smbclient //10.129.18.70/Replication -N
