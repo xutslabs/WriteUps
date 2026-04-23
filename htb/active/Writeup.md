@@ -45,6 +45,7 @@ sudo nmap -Pn -p- -T4 -sS -sV -sC \
   --script-timeout 20s --max-retries 2 \
   -oA nmap_full 10.129.18.70
 ```
+<img width="1084" height="445" alt="image" src="https://github.com/user-attachments/assets/c5e98040-5c3f-475f-abeb-3a168712c6cc" />
 
 # 🔹 Autorecon
 ```autorecon 10.129.18.70 \
